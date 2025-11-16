@@ -1,0 +1,293 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background: #f5f6fa;
+  color: #222;
+}
+
+/* HEADER */
+.header {
+  height: 60px;
+  background: #0a2b5f;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.logo__img {
+  height: 32px;
+  width: auto;
+  display: block;
+}
+
+.logo__text {
+  white-space: nowrap;
+}
+
+.header-right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* LAYOUT */
+.layout {
+  height: calc(100vh - 60px);
+  display: grid;
+  grid-template-columns: 350px 1fr;
+}
+
+/* SIDEBAR */
+.sidebar {
+  background: white;
+  padding: 20px;
+  border-right: 1px solid #ddd;
+  overflow-y: auto;
+}
+
+.sidebar h2 {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.field {
+  margin-bottom: 15px;
+}
+
+.field label {
+  font-size: 13px;
+  color: #555;
+}
+
+.input,
+.select {
+  width: 100%;
+  margin-top: 5px;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* BUTTONS */
+.btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #0a2b5f;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn:hover {
+  background: #0c3d8b;
+}
+
+.btn-light {
+  background: #e4e9f3;
+  color: #0a2b5f;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid white;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.btn-small {
+  padding: 6px 10px;
+  font-size: 13px;
+  border-radius: 6px;
+  background: #e8eef9;
+  border: 1px solid #cfd9ee;
+  cursor: pointer;
+}
+
+.btn-small:hover {
+  background: #dce6f8;
+}
+
+/* NGO CARDS */
+.ngo-list {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ngo-card {
+  padding: 12px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.ngo-card h3 {
+  margin-bottom: 6px;
+}
+
+.cat {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.desc {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+/* MAP */
+.map-container {
+  position: relative;
+  padding: 10px;
+}
+
+.map-help {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 5px;
+  padding-left: 4px;
+}
+
+.map {
+  background: #dfe6f1;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  position: relative;
+  min-height: 400px;
+}
+
+.map-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #777;
+  font-size: 16px;
+}
+
+/* МОДАЛКИ */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  z-index: 100;
+}
+
+.modal--open {
+  display: block;
+}
+
+.modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.modal__content {
+  position: relative;
+  max-width: 420px;
+  width: 90%;
+  margin: 60px auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.3);
+  padding: 16px 16px 18px;
+}
+
+.modal__content--wide {
+  max-width: 720px;
+}
+
+.modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.modal__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.modal__close {
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  color: #6b7280;
+}
+
+.modal__body {
+  margin-top: 8px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form--grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 12px;
+}
+
+.field--full {
+  grid-column: 1 / -1;
+}
+
+.textarea {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.form__footer {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* Профиль */
+
+.profile-value {
+  margin-top: 4px;
+  font-size: 14px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  word-break: break-word;
+}

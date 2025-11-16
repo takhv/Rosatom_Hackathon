@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Карта НКО</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+
+    <!-- Яндекс.Карты v3 -->
+    <script
+      src="https://api-maps.yandex.ru/v3/?apikey=6420d0d6-6737-4c2a-bf8a-ca3a1dc16d6b&lang=ru_RU"
+      type="text/javascript"
+      defer
+    ></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", initMap);
+
+      async function initMap() {
+        if (!window.ymaps3) return;
+
+        await ymaps3.ready;
+
+        const { YMap, YMapDefaultSchemeLayer } = ymaps3;
+
+        const map = new YMap(document.getElementById("map"), {
+          location: {
+            // более общий вид по умолчанию
+            center: [60, 60],
+            zoom: 3,
+          },
+        });
+
+        map.addChild(new YMapDefaultSchemeLayer());
+      }
+    </script>
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header class="header">
+      <div class="logo">
+        <img
+          src="LOGO_ROSATOM_rus_HOR_COLOR-01.svg"
+          alt="Росатом"
+          class="logo__img"
+        />
+        <span class="logo__text">Карта добрых дел</span>
+      </div>
+
+      <div class="header-right">
+        <!-- Фильтр по городу (участвует в search-form через form="search-form") -->
+        <select id="city-select" class="select" name="city" form="search-form">
+          <option value="">Все города</option>
+          <option value="angarsk">Ангарск, Иркутская область</option>
+          <option value="baikalsk">Байкальск, Иркутская область</option>
+          <option value="balakovo">Балаково, Саратовская область</option>
+          <option value="bilibino">Билибино, Чукотский АО</option>
+          <option value="volgodonsk">Волгодонск, Ростовская область</option>
+          <option value="glazov">Глазов, Удмуртская Республика</option>
+          <option value="desnogorsk">Десногорск, Смоленская область</option>
+          <option value="dimitrovgrad">
+            Димитровград, Ульяновская область
+          </option>
+          <option value="zheleznogorsk">Железногорск, Красноярский край</option>
+          <option value="zarechny_penza">
+            ЗАТО Заречный, Пензенская область
+          </option>
+          <option value="zarechny_sverdlovsk">
+            Заречный, Свердловская область
+          </option>
+          <option value="zelenogorsk">Зеленогорск, Красноярский край</option>
+          <option value="krasnokamensk">
+            Краснокаменск, Забайкальский край
+          </option>
+          <option value="kurchatov">Курчатов, Курская область</option>
+          <option value="lesnoy">Лесной, Свердловская область</option>
+          <option value="neman">Неман, Калининградская область</option>
+          <option value="novovoronezh">Нововоронеж, Воронежская область</option>
+          <option value="novouralsk">Новоуральск, Свердловская область</option>
+          <option value="obninsk">Обнинск, Калужская область</option>
+          <option value="ozersk">Озерск, Челябинская область</option>
+          <option value="pevek">Певек, Чукотский АО</option>
+          <option value="polyarnye_zori">
+            Полярные Зори, Мурманская область
+          </option>
+          <option value="sarov">Саров, Нижегородская область</option>
+          <option value="seversk">Северск, Томская область</option>
+          <option value="snezhinsk">Снежинск, Челябинская область</option>
+          <option value="sovetsk">Советск, Калининградская область</option>
+          <option value="sosnovy_bor">
+            Сосновый Бор, Ленинградская область
+          </option>
+          <option value="trekhgorny">Трехгорный, Челябинская область</option>
+          <option value="udomlya">Удомля, Тверская область</option>
+          <option value="usolie_sibirskoe">
+            Усолье-Сибирское, Иркутская область
+          </option>
+          <option value="elektrostal">Электросталь, Московская область</option>
+          <option value="energodar">Энергодар, Запорожская область</option>
+        </select>
+
+        <button class="btn" type="button" id="open-ngo-modal">
+          Добавить НКО
+        </button>
+        <button class="btn btn-light" type="button" id="open-login-modal">
+          Войти
+        </button>
+        <button class="btn btn-outline" type="button" id="open-profile-modal">
+          Мой профиль
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN LAYOUT -->
+    <main class="layout">
+      <!-- LEFT PANEL -->
+      <aside class="sidebar">
+        <h2>Поиск организаций</h2>
+
+        <!-- ФОРМА ПОИСКА / ФИЛЬТРОВ -->
+        <form id="search-form" method="GET" action="/ngos">
+          <div class="field">
+            <label for="search-name">Название</label>
+            <input
+              id="search-name"
+              name="name"
+              type="text"
+              class="input"
+              placeholder="Введите название"
+            />
+          </div>
+
+          <div class="field">
+            <label for="search-category">Категория</label>
+            <select id="search-category" name="category" class="select">
+              <option value="">Все категории</option>
+              <option value="kids">Дети</option>
+              <option value="animals">Животные</option>
+              <option value="old">Пожилые</option>
+              <option value="eco">Экология</option>
+              <option value="youth">Молодёжь</option>
+            </select>
+          </div>
+
+          <!-- город берётся из select в хэдере (name="city") -->
+
+          <button type="submit" class="btn btn-full">Найти</button>
+
+          <button
+            type="reset"
+            class="btn btn-full btn-light"
+            style="margin-top: 8px"
+          >
+            Сбросить фильтры
+          </button>
+        </form>
+
+        <!-- Список НКО (JS будет рендерить сюда) -->
+        <div class="ngo-list">
+          <p style="font-size: 14px; color: #666">
+            Загрузите организации по фильтрам или по умолчанию.
+          </p>
+        </div>
+      </aside>
+
+      <!-- MAP -->
+      <section class="map-container">
+        <div class="map-help">
+          Прокрутите колесо мыши для изменения масштаба, удерживайте левую
+          кнопку для перемещения по карте.
+        </div>
+
+        <div id="map" class="map">
+          <div class="map-placeholder">Карта загружается...</div>
+        </div>
+      </section>
+    </main>
+
+    <!-- МОДАЛКА ЛОГИНА -->
+    <div class="modal" id="login-modal">
+      <div class="modal__backdrop" data-close-modal></div>
+      <div class="modal__content">
+        <div class="modal__header">
+          <h2 class="modal__title">Вход</h2>
+          <button class="modal__close" type="button" data-close-modal>×</button>
+        </div>
+
+        <div class="modal__body">
+          <form id="login-form" method="POST" action="/login" class="form">
+            <div class="field">
+              <label for="login-email">E-mail</label>
+              <input id="login-email" name="email" type="email" class="input" />
+            </div>
+
+            <div class="field">
+              <label for="login-password">Пароль</label>
+              <input
+                id="login-password"
+                name="password"
+                type="password"
+                class="input"
+              />
+            </div>
+
+            <button type="submit" class="btn btn-full">Войти</button>
+          </form>
+
+          <!-- Кнопка открытия регистрации -->
+          <button
+            class="btn btn-light btn-full"
+            id="open-register-from-login"
+            style="margin-top: 10px"
+          >
+            Регистрация
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- МОДАЛКА РЕГИСТРАЦИИ -->
+    <div class="modal" id="register-modal">
+      <div class="modal__backdrop" data-close-modal></div>
+      <div class="modal__content">
+        <div class="modal__header">
+          <h2 class="modal__title">Регистрация</h2>
+          <button class="modal__close" type="button" data-close-modal>×</button>
+        </div>
+
+        <div class="modal__body">
+          <form
+            id="register-form"
+            method="POST"
+            action="/register"
+            class="form"
+          >
+            <div class="field">
+              <label for="reg-fullname">ФИО</label>
+              <input
+                id="reg-fullname"
+                name="fullname"
+                type="text"
+                class="input"
+              />
+            </div>
+
+            <div class="field">
+              <label for="reg-email">E-mail</label>
+              <input id="reg-email" name="email" type="email" class="input" />
+            </div>
+
+            <div class="field">
+              <label for="reg-password">Пароль</label>
+              <input
+                id="reg-password"
+                name="password"
+                type="password"
+                class="input"
+              />
+            </div>
+
+            <button type="submit" class="btn btn-full">Создать аккаунт</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- МОДАЛКА ДОБАВЛЕНИЯ/РЕДАКТИРОВАНИЯ НКО -->
+    <div class="modal" id="ngo-modal">
+      <div class="modal__backdrop" data-close-modal></div>
+      <div class="modal__content modal__content--wide">
+        <div class="modal__header">
+          <h2 class="modal__title">Добавить / редактировать НКО</h2>
+          <button class="modal__close" type="button" data-close-modal>×</button>
+        </div>
+        <div class="modal__body">
+          <form
+            id="ngo-form"
+            method="POST"
+            action="/ngo"
+            class="form form--grid"
+          >
+            <div class="field">
+              <label for="ngo-name">Название</label>
+              <input id="ngo-name" name="name" type="text" class="input" />
+            </div>
+
+            <div class="field">
+              <label for="ngo-category">Категория</label>
+              <select id="ngo-category" name="category" class="select">
+                <option value="kids">Дети</option>
+                <option value="old">Пожилые</option>
+                <option value="animals">Животные</option>
+                <option value="eco">Экология</option>
+                <option value="youth">Молодёжь</option>
+              </select>
+            </div>
+
+            <div class="field field--full">
+              <label for="ngo-description">Описание организации</label>
+              <textarea
+                id="ngo-description"
+                name="description"
+                class="textarea"
+                rows="3"
+              ></textarea>
+            </div>
+
+            <div class="field field--full">
+              <label for="ngo-volunteers">Чем могут помочь волонтёры</label>
+              <textarea
+                id="ngo-volunteers"
+                name="volunteerDescription"
+                class="textarea"
+                rows="3"
+              ></textarea>
+            </div>
+
+            <div class="field">
+              <label for="ngo-phone">Телефон</label>
+              <input id="ngo-phone" name="phone" type="tel" class="input" />
+            </div>
+
+            <div class="field">
+              <label for="ngo-address">Адрес</label>
+              <input
+                id="ngo-address"
+                name="address"
+                type="text"
+                class="input"
+              />
+            </div>
+
+            <div class="field">
+              <label for="ngo-city">Город</label>
+              <select id="ngo-city" name="city" class="select">
+                <option value="angarsk">Ангарск, Иркутская область</option>
+                <option value="baikalsk">Байкальск, Иркутская область</option>
+                <option value="balakovo">Балаково, Саратовская область</option>
+                <option value="bilibino">Билибино, Чукотский АО</option>
+                <option value="volgodonsk">
+                  Волгодонск, Ростовская область
+                </option>
+                <option value="glazov">Глазов, Удмуртская Республика</option>
+                <option value="desnogorsk">
+                  Десногорск, Смоленская область
+                </option>
+                <option value="dimitrovgrad">
+                  Димитровград, Ульяновская область
+                </option>
+                <option value="zheleznogorsk">
+                  Железногорск, Красноярский край
+                </option>
+                <option value="zarechny_penza">
+                  ЗАТО Заречный, Пензенская область
+                </option>
+                <option value="zarechny_sverdlovsk">
+                  Заречный, Свердловская область
+                </option>
+                <option value="zelenogorsk">
+                  Зеленогорск, Красноярский край
+                </option>
+                <option value="krasnokamensk">
+                  Краснокаменск, Забайкальский край
+                </option>
+                <option value="kurchatov">Курчатов, Курская область</option>
+                <option value="lesnoy">Лесной, Свердловская область</option>
+                <option value="neman">Неман, Калининградская область</option>
+                <option value="novovoronezh">
+                  Нововоронеж, Воронежская область
+                </option>
+                <option value="novouralsk">
+                  Новоуральск, Свердловская область
+                </option>
+                <option value="obninsk">Обнинск, Калужская область</option>
+                <option value="ozersk">Озерск, Челябинская область</option>
+                <option value="pevek">Певек, Чукотский АО</option>
+                <option value="polyarnye_zori">
+                  Полярные Зори, Мурманская область
+                </option>
+                <option value="sarov">Саров, Нижегородская область</option>
+                <option value="seversk">Северск, Томская область</option>
+                <option value="snezhinsk">Снежинск, Челябинская область</option>
+                <option value="sovetsk">
+                  Советск, Калининградская область
+                </option>
+                <option value="sosnovy_bor">
+                  Сосновый Бор, Ленинградская область
+                </option>
+                <option value="trekhgorny">
+                  Трехгорный, Челябинская область
+                </option>
+                <option value="udomlya">Удомля, Тверская область</option>
+                <option value="usolie_sibirskoe">
+                  Усолье-Сибирское, Иркутская область
+                </option>
+                <option value="elektrostal">
+                  Электросталь, Московская область
+                </option>
+                <option value="energodar">
+                  Энергодар, Запорожская область
+                </option>
+              </select>
+            </div>
+
+            <div class="form__footer">
+              <button type="button" class="btn btn-light" data-close-modal>
+                Отмена
+              </button>
+              <button type="submit" class="btn">Сохранить НКО</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- МОДАЛКА ПРОФИЛЯ -->
+    <div class="modal" id="profile-modal">
+      <div class="modal__backdrop" data-close-modal></div>
+      <div class="modal__content">
+        <div class="modal__header">
+          <h2 class="modal__title">Профиль</h2>
+          <button class="modal__close" type="button" data-close-modal>×</button>
+        </div>
+        <div class="modal__body">
+          <div class="field">
+            <label>E-mail</label>
+            <div id="profile-email" class="profile-value">—</div>
+          </div>
+
+          <div class="field">
+            <label>ФИО</label>
+            <div id="profile-fullname" class="profile-value">—</div>
+          </div>
+
+          <div class="field">
+            <label>Привязанная НКО</label>
+            <div id="profile-ngo" class="profile-value">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="main.js"></script>
+  </body>
+</html>
